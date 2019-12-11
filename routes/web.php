@@ -17,3 +17,7 @@ Route::get('/', function () {
 
 Route::get('/klarna/payment', 'KlarnaController@test');
 Route::get('/klarna/checkout', 'KlarnaController@checkout');
+
+Route::get('/paypalplus', 'PaypalPlusController@test');
+Route::get('/paypalplus/return', 'PaypalPlusController@returnUrl')->name('paypalplus.return');
+Route::get('/paypalplus/cancel', 'PaypalPlusController@cancelUrl')->name('paypalplus.cancel');

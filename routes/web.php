@@ -14,3 +14,6 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Route::get('/klarna/payment', 'KlarnaController@test');
+Route::get('/klarna/checkout', 'KlarnaController@checkout');

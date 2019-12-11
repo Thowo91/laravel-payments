@@ -15,9 +15,17 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/klarna/payment', 'KlarnaController@test');
-Route::get('/klarna/checkout', 'KlarnaController@checkout');
+Route::prefix('klarna')
+    ->group(function() {
+        Route::get('/payment', 'KlarnaController@test')->name('klarna.payment');
+        Route::get('/checkout', 'KlarnaController@checkout')->name('klarna.checkout');
+    });
 
-Route::get('/paypalplus', 'PaypalPlusController@test');
-Route::get('/paypalplus/return', 'PaypalPlusController@returnUrl')->name('paypalplus.return');
-Route::get('/paypalplus/cancel', 'PaypalPlusController@cancelUrl')->name('paypalplus.cancel');
+Route::prefix('paypalplus')
+    ->group(function() {
+        Route::get('/', 'PaypalPlusController@test')->name('paypalplus');
+        Route::get('/return', 'PaypalPlusController@returnUrl')->name('paypalplus.return');
+        Route::get('/cancel', 'PaypalPlusController@cancelUrl')->name('paypalplus.cancel');
+    });
+
+

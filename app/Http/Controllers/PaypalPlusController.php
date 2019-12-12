@@ -127,4 +127,29 @@ class PaypalPlusController extends Controller
         return view('paypal.paymentInfo', compact('info'));
     }
 
+    public function paymentAll()
+    {
+        $oAuthToken = new OAuthTokenCredential(
+            config('paypal.credentials.sandbox.client_id'),
+            config('paypal.credentials.sandbox.secret')
+        );
+
+        $apiContext = new ApiContext($oAuthToken);
+        $apiContext->setConfig(
+            config('paypal.settings')
+        );
+
+        $payment = new Payment();
+
+        $params = [
+            'count' => 20,
+            'start_index' => 0,
+            'sort_by' => 'create_time'
+        ];
+
+        $all = $payment->all($params, $apiContext);
+
+        return view('paypal.all', compact('all'));
+    }
+
 }

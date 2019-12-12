@@ -135,9 +135,9 @@ class KlarnaController extends Controller
             ],
             "merchant_urls" => [
                 "terms" => "http://merchant.com/tac.php", // agb
-                "checkout" => "http://merchant.com/checkout.php?sid={checkout.order.id}",
-                "confirmation" => "http://merchant.com/thankyou.php?sid={checkout.order.id}",
-                "push" => "http://localhost/kco/push.php?sid={checkout.order.id}"
+                "checkout" => route('klarna.checkout'), // on error on klarna site
+                "confirmation" => 'http://payments.local/klarna/return/confirmation?klarna_order_id={checkout.order.id}', // confirmation page
+                "push" => "http://localhost/kco/push.php?klarna_order_id={checkout.order.id}" // push
             ]
         ];
 
@@ -153,5 +153,29 @@ class KlarnaController extends Controller
 
         return view('klarna.checkout', compact('checkoutData'));
 
+    }
+
+    public function returnConfirmation()
+    {
+        $id = $_GET['klarna_order_id'];
+
+        $merchantId = env('KlARNA_MERCHANT_ID');
+        $sharedSecret = env('KLARNA_SHARED_SECRET');
+        $apiEndpoint = ConnectorInterface::EU_TEST_BASE_URL;
+
+        $connector = GuzzleConnector::create(
+            $merchantId,
+            $sharedSecret,
+            $apiEndpoint
+        );
+
+        $checkout = new Order($connector, $id);
+        $confirmationData = $checkout->fetch();
+
+        // acknowlege after recieve the push from klarna/save in our system
+        $orderAcknowledge = new \Klarna\Rest\OrderManagement\Order($connector, $id);
+        $orderAcknowledge->acknowledge();
+
+        return view('klarna.return.confirmation', compact('confirmationData'));
     }
 }

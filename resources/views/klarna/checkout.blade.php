@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Klarna</title>
+    <title>Klarna Checkout</title>
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
@@ -64,31 +64,6 @@
     </style>
 </head>
 <body>
-    <div class="flex-center position-ref full-height">
-
-        <div class="content">
-
-            <div id="klarna-payments-container"></div>
-
-            <script>
-                window.klarnaAsyncCallback = function () {
-
-                    Klarna.Payments.init({
-                        client_token: "{{ $session['client_token'] }}"
-                    });
-
-                    Klarna.Payments.load({
-                        container: '#klarna-payments-container',
-                        payment_method_category: "{{ $categories }}"
-                    }, function (res) {
-                        console.log(res);
-                    });
-
-                };
-            </script>
-            <script src="https://x.klarnacdn.net/kp/lib/v1/api.js" async></script>
-
-        </div>
-    </div>
+    {!! $checkoutData['html_snippet'] !!}
 </body>
 </html>

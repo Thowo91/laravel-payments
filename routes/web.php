@@ -17,7 +17,6 @@ Route::get('/', function () {
 
 Route::prefix('klarna')
     ->group(function() {
-        Route::get('/payment', 'KlarnaController@test')->name('klarna.payment');
         Route::get('/checkout', 'KlarnaController@checkout')->name('klarna.checkout');
         Route::get('/return/confirmation', 'KlarnaController@returnConfirmation')->name('klarna.return.confirmation');
     });

@@ -72,6 +72,7 @@
 
                 <div class="links">
                     <a href="{{ route('paypalplus') }}">PaypalPlus</a>
+                    <a href="{{ route('paypalplus.paymentinfo') }}">Paypal PaymentInfo</a>
                     <a href="{{ route('klarna.payment') }}">Klarna Payment (not working)</a>
                     <a href="{{ route('klarna.checkout') }}">Klarna Checkout</a>
                 </div>

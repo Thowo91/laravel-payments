@@ -2,9 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Klarna\Rest\Checkout\Order;
-use Klarna\Rest\Payments\Sessions;
 use Klarna\Rest\Transport\ConnectorInterface;
 use Klarna\Rest\Transport\GuzzleConnector;
 
@@ -102,8 +100,11 @@ class KlarnaController extends Controller
         $confirmationData = $checkout->fetch();
 
         // acknowlege after recieve the push from klarna/save in our system
-        $orderAcknowledge = new \Klarna\Rest\OrderManagement\Order($connector, $id);
-        $orderAcknowledge->acknowledge();
+        $orderManagement = new \Klarna\Rest\OrderManagement\Order($connector, $id);
+        $orderManagement->acknowledge();
+
+        // capture the amount of the order
+//        $capture = $orderManagement->createCapture(['captured_amount' => 100000]);
 
         return view('klarna.return.confirmation', compact('confirmationData'));
     }

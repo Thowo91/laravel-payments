@@ -11,6 +11,7 @@ use PayPal\Api\ItemList;
 use PayPal\Api\Payer;
 use PayPal\Api\PayerInfo;
 use PayPal\Api\Payment;
+use PayPal\Api\PaymentExecution;
 use PayPal\Api\RedirectUrls;
 use PayPal\Api\Transaction;
 use PayPal\Exception\PayPalConnectionException;
@@ -122,6 +123,8 @@ class PaypalPlusController extends Controller
         $response['token'] = $request->get('token');
         $response['PayerID'] = $request->get('PayerID');
 
+        $this->execution($response['paymentId'], $response['PayerID']);
+
         return view('paypal.return', compact('response'));
     }
 
@@ -169,6 +172,29 @@ class PaypalPlusController extends Controller
         $all = $payment->all($params, $config['apiContext']);
 
         return view('paypal.all', compact('all'));
+    }
+
+    /**
+     * @param $paymentId
+     * @param $payerId
+     */
+    public function execution($paymentId, $payerId)
+    {
+        $config = $this->config();
+
+        $payment = Payment::get($paymentId, $config['apiContext']);
+
+        $execution = new PaymentExecution();
+        $execution->setPayerId($payerId);
+
+        try {
+
+            $result = $payment->execute($execution, $config['apiContext']);
+        } catch (PayPalConnectionException $ex) {
+            echo $ex->getCode();
+            echo $ex->getData();
+            die($ex);
+        }
     }
 
 }

@@ -6,8 +6,11 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\View\View;
 use PayPal\Api\Address;
 use PayPal\Api\Amount;
+use PayPal\Api\Authorization;
+use PayPal\Api\Capture;
 use PayPal\Api\Item;
 use PayPal\Api\ItemList;
+use PayPal\Api\Order;
 use PayPal\Api\Payer;
 use PayPal\Api\PayerInfo;
 use PayPal\Api\Payment;
@@ -190,6 +193,28 @@ class PaypalPlusController extends Controller
         try {
 
             $result = $payment->execute($execution, $config['apiContext']);
+        } catch (PayPalConnectionException $ex) {
+            echo $ex->getCode();
+            echo $ex->getData();
+            die($ex);
+        }
+    }
+
+    public function capture()
+    {
+        $config = $this->config();
+        // get Order with OrderId
+        $order = new Order();
+
+        $amount = new Amount();
+        $amount->setCurrency('EUR')
+            ->setTotal(15);
+
+        $captureDetails = new Capture();
+        $captureDetails->setAmount($amount);
+
+        try {
+            $result = $order->capture($captureDetails, $config['apiContext']);
         } catch (PayPalConnectionException $ex) {
             echo $ex->getCode();
             echo $ex->getData();

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
 use PayPal\Api\Address;
 use PayPal\Api\Amount;
 use PayPal\Api\Item;
@@ -19,6 +21,9 @@ use Illuminate\Http\Request;
 class PaypalPlusController extends Controller
 {
 
+    /**
+     * @return array
+     */
     public function config()
     {
         $config = [];
@@ -38,7 +43,11 @@ class PaypalPlusController extends Controller
         return $config;
     }
 
-    public function test() {
+    /**
+     * @return Factory|View
+     */
+    public function test()
+    {
 
         $config = $this->config();
 
@@ -102,6 +111,10 @@ class PaypalPlusController extends Controller
 
     }
 
+    /**
+     * @param Request $request
+     * @return Factory|View
+     */
     public function returnUrl(Request $request)
     {
         $response = [];
@@ -112,6 +125,10 @@ class PaypalPlusController extends Controller
         return view('paypal.return', compact('response'));
     }
 
+    /**
+     * @param Request $request
+     * @return Factory|View
+     */
     public function cancelUrl(Request $request)
     {
         $response = [];
@@ -120,6 +137,10 @@ class PaypalPlusController extends Controller
         return view('paypal.cancel', compact('response'));
     }
 
+    /**
+     * @param $paymentId
+     * @return Factory|View
+     */
     public function paymentInfo($paymentId)
     {
         $config = $this->config();
@@ -130,6 +151,9 @@ class PaypalPlusController extends Controller
         return view('paypal.paymentInfo', compact('info'));
     }
 
+    /**
+     * @return Factory|View
+     */
     public function paymentAll()
     {
         $config = $this->config();

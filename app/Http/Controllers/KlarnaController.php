@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Contracts\View\Factory;
+use Illuminate\View\View;
 use Klarna\Rest\Checkout\Order;
 use Klarna\Rest\Transport\ConnectorInterface;
 use Klarna\Rest\Transport\GuzzleConnector;
@@ -9,6 +11,9 @@ use Klarna\Rest\Transport\GuzzleConnector;
 class KlarnaController extends Controller
 {
 
+    /**
+     * @return GuzzleConnector
+     */
     public function connector()
     {
         $merchantId = env('KlARNA_MERCHANT_ID');
@@ -24,6 +29,9 @@ class KlarnaController extends Controller
         return $connector;
     }
 
+    /**
+     * @return Factory|View
+     */
     public function checkout()
     {
         $connector = $this->connector();
@@ -89,6 +97,9 @@ class KlarnaController extends Controller
 
     }
 
+    /**
+     * @return Factory|View
+     */
     public function returnConfirmation()
     {
         $connector = $this->connector();

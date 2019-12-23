@@ -26,7 +26,7 @@ Route::prefix('paypalplus')
         Route::get('/', 'PaypalPlusController@test')->name('paypalplus');
         Route::get('/return', 'PaypalPlusController@returnUrl')->name('paypalplus.return');
         Route::get('/cancel', 'PaypalPlusController@cancelUrl')->name('paypalplus.cancel');
-        Route::get('/paymentInfo', 'PaypalPlusController@paymentInfo')->name('paypalplus.paymentinfo');
+        Route::get('/paymentInfo/{paymentId}', 'PaypalPlusController@paymentInfo')->name('paypalplus.paymentinfo');
         Route::get('/paymentAll', 'PaypalPlusController@paymentAll')->name('paypalplus.paymentall');
     });
 

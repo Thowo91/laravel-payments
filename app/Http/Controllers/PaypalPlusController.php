@@ -71,7 +71,7 @@ class PaypalPlusController extends Controller
         $redirectUrl->setCancelUrl(route('paypalplus.cancel'));
 
         $payment = new Payment();
-        $payment->setIntent('payment');
+        $payment->setIntent('sale');
         $payment->setPayer($payer);
         $payment->setRedirectUrls($redirectUrl);
         $payment->setTransactions([$transaction]);
@@ -109,7 +109,7 @@ class PaypalPlusController extends Controller
         return view('paypal.cancel', compact('response'));
     }
 
-    public function paymentInfo()
+    public function paymentInfo($paymentId)
     {
         $oAuthToken = new OAuthTokenCredential(
             config('paypal.credentials.sandbox.client_id'),
@@ -122,7 +122,7 @@ class PaypalPlusController extends Controller
         );
 
         $payment = new Payment();
-        $info = $payment->get('PAYID-LXZAKTY98G95380V1071823Y', $apiContext);
+        $info = $payment->get($paymentId, $apiContext);
 
         return view('paypal.paymentInfo', compact('info'));
     }

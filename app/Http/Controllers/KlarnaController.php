@@ -9,7 +9,7 @@ use Klarna\Rest\Transport\GuzzleConnector;
 class KlarnaController extends Controller
 {
 
-    public function checkout()
+    public function connector()
     {
         $merchantId = env('KlARNA_MERCHANT_ID');
         $sharedSecret = env('KLARNA_SHARED_SECRET');
@@ -20,6 +20,13 @@ class KlarnaController extends Controller
             $sharedSecret,
             $apiEndpoint
         );
+
+        return $connector;
+    }
+
+    public function checkout()
+    {
+        $connector = $this->connector();
 
         $address = [
             'title' => 'Herr',
@@ -84,17 +91,9 @@ class KlarnaController extends Controller
 
     public function returnConfirmation()
     {
+        $connector = $this->connector();
+
         $id = $_GET['klarna_order_id'];
-
-        $merchantId = env('KlARNA_MERCHANT_ID');
-        $sharedSecret = env('KLARNA_SHARED_SECRET');
-        $apiEndpoint = ConnectorInterface::EU_TEST_BASE_URL;
-
-        $connector = GuzzleConnector::create(
-            $merchantId,
-            $sharedSecret,
-            $apiEndpoint
-        );
 
         $checkout = new Order($connector, $id);
         $confirmationData = $checkout->fetch();

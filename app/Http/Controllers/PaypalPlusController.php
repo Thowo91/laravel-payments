@@ -19,17 +19,28 @@ use Illuminate\Http\Request;
 class PaypalPlusController extends Controller
 {
 
-    public function test() {
+    public function config()
+    {
+        $config = [];
 
         $oAuthToken = new OAuthTokenCredential(
             config('paypal.credentials.sandbox.client_id'),
             config('paypal.credentials.sandbox.secret')
         );
+        $config['oAuthToken'] = $oAuthToken;
 
         $apiContext = new ApiContext($oAuthToken);
         $apiContext->setConfig(
             config('paypal.settings')
         );
+        $config['apiContext'] = $apiContext;
+
+        return $config;
+    }
+
+    public function test() {
+
+        $config = $this->config();
 
         $item1 = new Item();
         $item1->setName('Test Item')
@@ -77,7 +88,7 @@ class PaypalPlusController extends Controller
         $payment->setTransactions([$transaction]);
 
         try {
-            $payment = $payment->create($apiContext);
+            $payment = $payment->create($config['apiContext']);
 
             $approvalUrl = $payment->getApprovalLink();
 
@@ -111,33 +122,17 @@ class PaypalPlusController extends Controller
 
     public function paymentInfo($paymentId)
     {
-        $oAuthToken = new OAuthTokenCredential(
-            config('paypal.credentials.sandbox.client_id'),
-            config('paypal.credentials.sandbox.secret')
-        );
-
-        $apiContext = new ApiContext($oAuthToken);
-        $apiContext->setConfig(
-            config('paypal.settings')
-        );
+        $config = $this->config();
 
         $payment = new Payment();
-        $info = $payment->get($paymentId, $apiContext);
+        $info = $payment->get($paymentId, $config['apiContext']);
 
         return view('paypal.paymentInfo', compact('info'));
     }
 
     public function paymentAll()
     {
-        $oAuthToken = new OAuthTokenCredential(
-            config('paypal.credentials.sandbox.client_id'),
-            config('paypal.credentials.sandbox.secret')
-        );
-
-        $apiContext = new ApiContext($oAuthToken);
-        $apiContext->setConfig(
-            config('paypal.settings')
-        );
+        $config = $this->config();
 
         $payment = new Payment();
 
@@ -147,7 +142,7 @@ class PaypalPlusController extends Controller
             'sort_by' => 'create_time'
         ];
 
-        $all = $payment->all($params, $apiContext);
+        $all = $payment->all($params, $config['apiContext']);
 
         return view('paypal.all', compact('all'));
     }

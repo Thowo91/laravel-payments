@@ -203,8 +203,15 @@ class PaypalPlusController extends Controller
     public function capture()
     {
         $config = $this->config();
-        // get Order with OrderId
-        $order = new Order();
+
+        // Retrieving the OrderId by parsing the object inside related_resources
+        $payment = Payment::get('paymentId', $config['apiContext']);
+        $transactions = $payment->getTransactions();
+        $transaction = $transactions[0];
+        $relatedResources = $transaction->getRelatedResources();
+        $relatedResource = $relatedResources[0];
+
+        $order = $relatedResource->getOrder();
 
         $amount = new Amount();
         $amount->setCurrency('EUR')

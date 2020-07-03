@@ -12,5 +12,6 @@
         <a href="{{ route('paypalplus') }}">PaypalPlus</a>
         <a href="{{ route('paypalplus.paymentall') }}">Paypal All</a>
         <a href="{{ route('klarna.checkout') }}">Klarna Checkout</a>
+        <a href="{{ route('stripe') }}">Stripe</a>
     </div>
 @endsection

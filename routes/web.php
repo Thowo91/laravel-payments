@@ -30,4 +30,9 @@ Route::prefix('paypalplus')
         Route::get('/paymentAll', 'PaypalPlusController@paymentAll')->name('paypalplus.paymentall');
     });
 
-
+Route::prefix('stripe')
+    ->group(function() {
+        Route::get('/', 'StripeController@index')->name('stripe');
+        Route::get('/sucess', 'StripeController@sucessUrl')->name('stripe.sucess');
+        Route::get('/cancel', 'StripeController@cancelUrl')->name('stripe.cancel');
+    });
